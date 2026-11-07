@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>สื่อโต้ตอบ: ระบบสมการเชิงเส้นสองตัวแปร | ม.3</title>
+<style>
+:root{--navy:#183153;--blue:#2878c8;--orange:#ef9b35;--teal:#159b91;--bg:#f4f7fb;--ink:#243247;--muted:#66758a;--line:#dce4ef}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Tahoma,"Noto Sans Thai",sans-serif;color:var(--ink);line-height:1.6}
+header{background:linear-gradient(120deg,#17375e,#2878c8);color:#fff;padding:28px 18px;text-align:center}
+header h1{margin:0 0 5px;font-size:clamp(22px,4vw,32px)}header p{margin:0;opacity:.92}
+main{max-width:1120px;margin:22px auto;padding:0 16px 40px}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px;margin:16px 0;box-shadow:0 5px 18px #1831530b}
+h2{font-size:21px;color:var(--navy);margin:0 0 12px}h3{font-size:17px;color:var(--navy);margin:12px 0 6px}
+.objective{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}
+.pill{background:#edf5ff;border-radius:12px;padding:12px}
+.grid{display:grid;grid-template-columns: minmax(260px, .85fr) minmax(320px,1.3fr);gap:18px}
+@media(max-width:760px){.grid{grid-template-columns:1fr}}
+.controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.field label{display:block;font-weight:bold;font-size:14px;margin-bottom:4px}
+input[type=number]{width:100%;padding:10px;border:1px solid #cbd6e4;border-radius:9px;font-size:16px}
+.eq{font-size:20px;font-weight:bold;text-align:center;padding:10px;background:#f5f8fc;border-radius:10px;margin:8px 0}
+.eq .one{color:var(--blue)}.eq .two{color:#d47b16}
+button{border:0;border-radius:10px;padding:10px 15px;background:var(--blue);color:#fff;font-weight:bold;cursor:pointer;font-size:15px}
+button.secondary{background:#e9eff7;color:var(--navy)}button:hover{filter:brightness(.96)}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+canvas{width:100%;height:auto;display:block;background:#fff;border:1px solid var(--line);border-radius:12px}
+.status{padding:12px;border-radius:10px;background:#eef8f6;margin-top:10px}
+.status strong{color:#08796f}.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:14px;margin:8px 0}
+.dot{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:5px}
+.note{color:var(--muted);font-size:14px}
+.steps{background:#f7f9fc;border-left:4px solid var(--teal);padding:12px 14px;border-radius:8px}
+.question{border:1px solid var(--line);border-radius:12px;padding:14px;margin:12px 0}
+.question p{font-weight:bold;margin:0 0 8px}
+.options{display:grid;gap:6px}.options label{padding:7px 9px;border-radius:8px;background:#f6f8fb;cursor:pointer}
+.feedback{margin-top:8px;font-weight:bold}.answer{display:none;background:#eef8f6;padding:10px;border-radius:8px;margin-top:8px}
+.score{font-size:20px;font-weight:bold;color:var(--navy)}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:18px}
+</style>
+</head>
+<body>
+<header>
+  <h1>สำรวจคำตอบด้วยกราฟ</h1>
+  <p>สื่อโต้ตอบ เรื่อง การแก้ระบบสมการเชิงเส้นสองตัวแปร | คณิตศาสตร์ ม.3</p>
+</header>
+<main>
+<section class="card">
+  <h2>เป้าหมายการเรียนรู้</h2>
+  <div class="objective">
+    <div class="pill"><b>สังเกต</b><br>สังเกตตำแหน่งและลักษณะการตัดกันของกราฟเส้นตรงสองเส้น</div>
+    <div class="pill"><b>วิเคราะห์</b><br>วิเคราะห์ความสัมพันธ์ระหว่างกราฟกับจำนวนคำตอบของระบบสมการ</div>
+    <div class="pill"><b>ลงมือแก้</b><br>หาคู่อันดับที่เป็นคำตอบร่วมของสมการทั้งสอง</div>
+  </div>
+</section>
+
+<section class="card">
+<h2>กิจกรรมที่ 1 ทดลองปรับสมการและสังเกตกราฟ</h2>
+<p>ระบบสมการในรูป <b>a₁x + b₁y = c₁</b> และ <b>a₂x + b₂y = c₂</b> กำหนดค่าสัมประสิทธิ์ แล้วสังเกตว่าเส้นตรงทั้งสองสัมพันธ์กันอย่างไร</p>
+<div class="grid">
+  <div>
+    <h3>กำหนดสมการที่ 1 <span style="color:#2878c8">(เส้นสีน้ำเงิน)</span></h3>
+    <div class="controls">
+      <div class="field"><label for="a1">a₁</label><input id="a1" type="number" value="1" step="1"></div>
+      <div class="field"><label for="b1">b₁</label><input id="b1" type="number" value="1" step="1"></div>
+      <div class="field"><label for="c1">c₁</label><input id="c1" type="number" value="6" step="1"></div>
+    </div>
+    <div class="eq one" id="eq1">x + y = 6</div>
+    <h3>กำหนดสมการที่ 2 <span style="color:#d47b16">(เส้นสีส้ม)</span></h3>
+    <div class="controls">
+      <div class="field"><label for="a2">a₂</label><input id="a2" type="number" value="1" step="1"></div>
+      <div class="field"><label for="b2">b₂</label><input id="b2" type="number" value="-1" step="1"></div>
+      <div class="field"><label for="c2">c₂</label><input id="c2" type="number" value="2" step="1"></div>
+    </div>
+    <div class="eq two" id="eq2">x − y = 2</div>
+    <div class="actions">
+      <button onclick="updateGraph(true)">แสดงกราฟ</button>
+      <button class="secondary" onclick="preset('unique')">ตัดกัน 1 จุด</button>
+      <button class="secondary" onclick="preset('parallel')">เส้นขนาน</button>
+      <button class="secondary" onclick="preset('same')">เส้นเดียวกัน</button>
+    </div>
+    <div class="status" id="result" aria-live="polite">กำลังวิเคราะห์ระบบสมการ…</div>
+  </div>
+  <div>
+    <div class="legend"><span><i class="dot" style="background:#2878c8"></i>สมการที่ 1</span><span><i class="dot" style="background:#ef9b35"></i>สมการที่ 2</span><span>✦ จุดตัด (ถ้ามี)</span></div>
+    <canvas id="graph" width="700" height="510" aria-label="กราฟเส้นตรงสองเส้น"></canvas>
+    <p class="note">กราฟจะปรับตามค่าที่กำหนดโดยอัตโนมัติ แกน x และ y แสดงช่วงประมาณ −10 ถึง 10</p>
+  </div>
+</div>
+</section>
+
+<section class="card">
+<h2>กิจกรรมที่ 2 วิเคราะห์จำนวนคำตอบ</h2>
+<div class="steps">
+<b>หลักการสังเกต</b>
+<ul>
+<li>เส้นตรงตัดกัน 1 จุด → มีคำตอบเดียว คือพิกัดของจุดตัด</li>
+<li>เส้นตรงขนานกันและไม่ทับกัน → ไม่มีคำตอบ</li>
+<li>เส้นตรงทับกันพอดี → มีคำตอบไม่จำกัดจำนวน</li>
+</ul>
+</div>
+<h3>ตรวจสอบคำตอบด้วยการแทนค่า</h3>
+<p>เมื่อกราฟตัดกันที่จุด (x, y) คู่อันดับนี้ต้องทำให้สมการทั้งสองเป็นจริงพร้อมกัน</p>
+<div id="substitution" class="steps">ตัวอย่างเริ่มต้น: จุดตัด (4, 2) ทำให้ 4 + 2 = 6 และ 4 − 2 = 2 เป็นจริงทั้งสองสมการ</div>
+<div class="actions"><button class="secondary" onclick="animatePoint()">แสดงการเคลื่อนที่ไปยังจุดตัด</button></div>
+</section>
+
+<section class="card">
+<h2>สรุปความเข้าใจ</h2>
+<p>การแก้ระบบสมการเชิงเส้นสองตัวแปร คือ การหาคู่อันดับ (x, y) ที่ทำให้สมการทั้งสองเป็นจริงพร้อมกัน วิธีกราฟช่วยให้เห็นภาพของคำตอบ ส่วนการแทนค่าหรือการกำจัดตัวแปรช่วยตรวจสอบและหาคำตอบได้อย่างเป็นขั้นตอน</p>
+</section>
+
+<section class="card" id="quiz">
+<h2>แบบประเมินท้ายกิจกรรม 10 ข้อ</h2>
+<p class="note">เลือกคำตอบที่ถูกต้อง จากนั้นกด “ตรวจคำตอบ” เพื่อดูคะแนนและเฉลยรายข้อ</p>
+<div id="questions"></div>
+<div class="actions"><button onclick="grade()">ตรวจคำตอบ</button><button class="secondary" onclick="resetQuiz()">ทำแบบประเมินอีกครั้ง</button></div>
+<div id="score" class="score" aria-live="polite"></div>
+</section>
+<footer>สื่อประกอบการจัดการเรียนรู้คณิตศาสตร์ ระดับชั้นมัธยมศึกษาปีที่ 3</footer>
+</main>
+<script>
+const ids=['a1','b1','c1','a2','b2','c2'];
+const $=id=>document.getElementById(id);
+const val=id=>Number($(id).value);
+let current={x:4,y:2,type:'unique'};
+ids.forEach(id=>$(id).addEventListener('input',()=>updateGraph(false)));
+function fmt(n){return Number.isInteger(n)?String(n):Number(n.toFixed(2)).toString()}
+function equation(a,b,c){let s=''; if(a!==0)s+=(a===1?'':a===-1?'−':a)+'x'; if(b!==0){if(s)s+=b>0?' + ':' − ';else if(b<0)s+='−';s+=(Math.abs(b)===1?'':Math.abs(b))+'y'} if(!s)s='0';return s+' = '+c}
+function draw(){
+ const canvas=$('graph'),ctx=canvas.getContext('2d'),W=canvas.width,H=canvas.height;
+ ctx.clearRect(0,0,W,H);const xmin=-10,xmax=10,ymin=-10,ymax=10;
+ const X=x=>((x-xmin)/(xmax-xmin))*W, Y=y=>H-((y-ymin)/(ymax-ymin))*H;
+ ctx.lineWidth=1;ctx.strokeStyle='#e8edf4';
+ for(let i=-10;i<=10;i++){ctx.beginPath();ctx.moveTo(X(i),0);ctx.lineTo(X(i),H);ctx.stroke();ctx.beginPath();ctx.moveTo(0,Y(i));ctx.lineTo(W,Y(i));ctx.stroke()}
+ ctx.strokeStyle='#53657a';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(X(0),0);ctx.lineTo(X(0),H);ctx.moveTo(0,Y(0));ctx.lineTo(W,Y(0));ctx.stroke();
+ ctx.fillStyle='#53657a';ctx.font='13px Tahoma';ctx.textAlign='center';
+ for(let i=-10;i<=10;i+=2){ctx.fillText(i,X(i),Y(0)+18);if(i!==0){ctx.textAlign='left';ctx.fillText(i,X(0)+7,Y(i)-4);ctx.textAlign='center'}}
+ const lines=[[val('a1'),val('b1'),val('c1'),'#2878c8'],[val('a2'),val('b2'),val('c2'),'#ef9b35']];
+ lines.forEach(([a,b,c,color])=>{ctx.strokeStyle=color;ctx.lineWidth=4;ctx.beginPath();let started=false;for(let px=0;px<=W;px+=2){let x=xmin+px/W*(xmax-xmin),y;if(Math.abs(b)<1e-10){if(Math.abs(a)<1e-10)continue; x=c/a;y=ymin+(ymax-ymin)*(1-px/W); }else y=(c-a*x)/b;if(y<ymin-1||y>ymax+1){started=false;continue}if(!started){ctx.moveTo(X(x),Y(y));started=true}else ctx.lineTo(X(x),Y(y))}ctx.stroke()});
+ if(current.type==='unique'&&Number.isFinite(current.x)&&Number.isFinite(current.y)&&Math.abs(current.x)<=10&&Math.abs(current.y)<=10){
+ ctx.fillStyle='#159b91';ctx.beginPath();ctx.arc(X(current.x),Y(current.y),8,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#fff';ctx.lineWidth=3;ctx.stroke();
+ ctx.fillStyle='#08796f';ctx.font='bold 16px Tahoma';ctx.textAlign='left';ctx.fillText('('+fmt(current.x)+', '+fmt(current.y)+')',X(current.x)+12,Y(current.y)-12)
+ }
+}
+function updateGraph(){
+ let [a,b,c,d,e,f]=ids.map(val);
+ $('eq1').textContent=equation(a,b,c);$('eq2').textContent=equation(d,e,f);
+ let det=a*e-d*b,scale=Math.max(1,Math.abs(a),Math.abs(b),Math.abs(d),Math.abs(e));
+ let tol=1e-9*scale*scale;
+ if(Math.abs(det)>tol){
+  let x=(c*e-f*b)/det,y=(a*f-d*c)/det;current={x,y,type:'unique'};
+  $('result').innerHTML='<strong>กราฟตัดกัน 1 จุด</strong><br>ระบบสมการมีคำตอบเดียว คือ ('+fmt(x)+', '+fmt(y)+')';
+  $('substitution').textContent='ตรวจสอบ: แทน x = '+fmt(x)+' และ y = '+fmt(y)+' ลงในสมการทั้งสอง จะได้ '+fmt(a*x+b*y)+' = '+c+' และ '+fmt(d*x+e*y)+' = '+f+' (อาจคลาดเคลื่อนเล็กน้อยจากการปัดเศษ)';
+ }else{
+  let same=(Math.abs(a*f-d*c)<tol && Math.abs(b*f-e*c)<tol);
+  if(Math.abs(a)+Math.abs(b)<1e-10 && Math.abs(d)+Math.abs(e)<1e-10)same=(Math.abs(c-f)<1e-10);
+  current={type:same?'same':'parallel'};
+  $('result').innerHTML=same?'<strong>กราฟทับกันเป็นเส้นตรงเดียวกัน</strong><br>ระบบสมการมีคำตอบไม่จำกัดจำนวน':'<strong>กราฟขนานกันและไม่ตัดกัน</strong><br>ระบบสมการไม่มีคำตอบ';
+  $('substitution').textContent=same?'สมการทั้งสองแทนเส้นตรงเดียวกัน จึงมีทุกจุดบนเส้นตรงนั้นเป็นคำตอบร่วม':'ไม่มีจุดใดอยู่บนเส้นตรงทั้งสองพร้อมกัน จึงไม่มีคำตอบร่วม';
+ }
+ draw();
+}
+function preset(type){
+ if(type==='unique'){['1','1','6','1','-1','2'].forEach((v,i)=>$(ids[i]).value=v)}
+ if(type==='parallel'){['1','1','6','1','1','2'].forEach((v,i)=>$(ids[i]).value=v)}
+ if(type==='same'){['1','1','6','2','2','12'].forEach((v,i)=>$(ids[i]).value=v)}
+ updateGraph(true)
+}
+function animatePoint(){
+ if(current.type!=='unique'){alert('ตัวอย่างนี้ไม่มีจุดตัดเพียงจุดเดียว ลองเลือกชุดสมการที่ตัดกัน 1 จุด');return}
+ const canvas=$('graph'),ctx=canvas.getContext('2d');let t=0;const x0=-8,y0=8,x1=current.x,y1=current.y;
+ function frame(){updateGraph();let x=x0+(x1-x0)*t,y=y0+(y1-y0)*t;const X=v=>(v+10)/20*canvas.width,Y=v=>canvas.height-(v+10)/20*canvas.height;ctx.fillStyle='#9b59b6';ctx.beginPath();ctx.arc(X(x),Y(y),7,0,Math.PI*2);ctx.fill();ctx.fillStyle='#6c3483';ctx.font='bold 14px Tahoma';ctx.fillText('กำลังเคลื่อนไปยังจุดตัด',20,28);t+=.025;if(t<=1)requestAnimationFrame(frame);else updateGraph()}
+ requestAnimationFrame(frame)
+}
+const qs=[
+ {q:'1. คำตอบของระบบสมการ หมายถึงข้อใด',o:['ค่าของ x เพียงค่าเดียว','ค่าของ y เพียงค่าเดียว','คู่อันดับที่ทำให้สมการทั้งสองเป็นจริง','จุดใดก็ได้บนกราฟเส้นใดเส้นหนึ่ง'],a:2,e:'คำตอบต้องเป็นคู่อันดับ (x, y) ที่ทำให้สมการทั้งสองเป็นจริงพร้อมกัน'},
+ {q:'2. กราฟของสมการเชิงเส้นสองตัวแปรมีลักษณะเป็นรูปใด',o:['วงกลม','เส้นตรง','พาราโบลา','วงรี'],a:1,e:'สมการเชิงเส้นสองตัวแปรมีกราฟเป็นเส้นตรง'},
+ {q:'3. ถ้าเส้นตรงสองเส้นตัดกัน 1 จุด ระบบสมการมีคำตอบกี่คำตอบ',o:['ไม่มีคำตอบ','หนึ่งคำตอบ','สองคำตอบ','ไม่จำกัดจำนวน'],a:1,e:'จุดตัดเพียงจุดเดียวเป็นคำตอบร่วมเพียงคู่อันดับเดียว'},
+ {q:'4. ถ้าเส้นตรงสองเส้นขนานกันและไม่ทับกัน จะสรุปได้อย่างไร',o:['มีหนึ่งคำตอบ','มีสองคำตอบ','ไม่มีคำตอบ','มีคำตอบไม่จำกัด'],a:2,e:'เส้นขนานที่ไม่ทับกันไม่มีจุดตัด จึงไม่มีคำตอบร่วม'},
+ {q:'5. ถ้าเส้นตรงสองเส้นทับกันเป็นเส้นเดียวกัน จะมีคำตอบอย่างไร',o:['ไม่มีคำตอบ','หนึ่งคำตอบ','สองคำตอบ','ไม่จำกัดจำนวน'],a:3,e:'ทุกจุดบนเส้นตรงนั้นเป็นจุดร่วม จึงมีคำตอบไม่จำกัดจำนวน'},
+ {q:'6. คู่อันดับใดเป็นคำตอบของระบบ x + y = 5 และ x − y = 1',o:['(2, 3)','(3, 2)','(1, 4)','(4, 1)'],a:1,e:'แทน (3, 2): 3 + 2 = 5 และ 3 − 2 = 1'},
+ {q:'7. จุด (2, 1) เป็นคำตอบของสมการ 2x + y = 5 หรือไม่',o:['เป็น เพราะ 2(2) + 1 = 5','เป็น เพราะ 2 + 1 = 5','ไม่เป็น เพราะได้ 4','ไม่เป็น เพราะ x ไม่เท่ากับ y'],a:0,e:'แทน x = 2, y = 1 ได้ 2(2) + 1 = 5 เป็นจริง'},
+ {q:'8. ระบบ x + y = 4 และ 2x + 2y = 8 มีลักษณะอย่างไร',o:['ตัดกัน 1 จุด','ขนานกัน','ทับกัน','ไม่มีกราฟ'],a:2,e:'สมการที่สองเป็น 2 เท่าของสมการแรก จึงเป็นเส้นตรงเดียวกัน'},
+ {q:'9. ระบบ x + y = 4 และ x + y = 7 มีคำตอบหรือไม่',o:['มีหนึ่งคำตอบ','มีสองคำตอบ','มีไม่จำกัดจำนวน','ไม่มีคำตอบ'],a:3,e:'ผลบวก x + y ไม่สามารถเป็นทั้ง 4 และ 7 ในเวลาเดียวกันได้ กราฟจึงขนานกัน'},
+ {q:'10. วิธีใดใช้ตรวจสอบว่าคู่อันดับเป็นคำตอบร่วมได้',o:['แทนค่าในสมการใดสมการหนึ่งเท่านั้น','แทนค่าในสมการทั้งสอง','ดูเฉพาะค่า x','ดูว่ากราฟมีสีต่างกันหรือไม่'],a:1,e:'ต้องแทนค่าลงในสมการทั้งสอง และตรวจว่าทั้งสองสมการเป็นจริง'}
+];
+function renderQuiz(){
+ $('questions').innerHTML=qs.map((q,i)=>`<div class="question" id="q${i}"><p>${q.q}</p><div class="options">${q.o.map((o,j)=>`<label><input type="radio" name="q${i}" value="${j}"> ${['ก','ข','ค','ง'][j]}. ${o}</label>`).join('')}</div><div class="feedback" id="f${i}"></div><div class="answer" id="a${i}"><b>เฉลย:</b> ${['ก','ข','ค','ง'][q.a]}. ${q.o[q.a]}<br>${q.e}</div></div>`).join('');
+}
+function grade(){let score=0;qs.forEach((q,i)=>{let s=document.querySelector(`input[name="q${i}"]:checked`);let ok=s&&Number(s.value)===q.a;if(ok)score++;$('f'+i).textContent=s?(ok?'✓ ถูกต้อง':'✗ ยังไม่ถูกต้อง'):'ยังไม่ได้เลือกคำตอบ';$('f'+i).style.color=ok?'#08796f':'#b54736';$('a'+i).style.display='block'});$('score').textContent='คะแนนที่ได้ '+score+' / 10 คะแนน'+(score>=8?' — ดีเยี่ยม!':score>=5?' — ทำได้ดี ลองทบทวนอีกครั้ง':' — ทบทวนหลักการจากกิจกรรมแล้วลองใหม่')}
+function resetQuiz(){document.querySelectorAll('#questions input').forEach(x=>x.checked=false);qs.forEach((q,i)=>{$('f'+i).textContent='';$('a'+i).style.display='none'});$('score').textContent=''}
+renderQuiz();updateGraph();
+</script>
+</body>
+</html>
